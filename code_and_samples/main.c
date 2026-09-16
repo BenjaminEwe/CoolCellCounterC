@@ -8,11 +8,18 @@
 #include <stdio.h>
 #include "cbmp.h"
 
+// Prototypes
+void convertRgbToGray(const unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], unsigned char outputImage[BMP_WIDTH][BMP_HEIGHT]);
+void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT]);
+void erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT]);
+int detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int outputCoordinates[][2]);
+void addMarkersToImage(unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], const unsigned int spotCoordinates[][2]);
+
 //Function to invert pixels of an image (negative)
-void invert(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]){
+void invert(unsigned char input_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], unsigned char output_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS]){
   for (int x = 0; x < BMP_WIDTH; x++)
   {
-    for (int y = 0; y < BMP_HEIGTH; y++)
+    for (int y = 0; y < BMP_HEIGHT; y++)
     {
       for (int c = 0; c < BMP_CHANNELS; c++)
       {
@@ -23,8 +30,8 @@ void invert(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], unsi
 }
 
   //Declaring the array to store the image (unsigned char = unsigned 8 bit)
-  unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
-  unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
+  unsigned char input_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
+  unsigned char output_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
 
 //Main function
 int main(int argc, char** argv)
