@@ -33,7 +33,7 @@ void erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
                 {
                     if (checkY < 0)
                         continue;
-                    if (STRUCTURING_ELEMENT[i][j] == 1 && binaryImage[checkX][checkY] != 1)
+                    if (STRUCTURING_ELEMENT[i][j] == 1 && binaryImage[checkX][checkY] == 0)
                     {
                         shouldErode = 1;
                         break;
