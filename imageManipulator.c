@@ -25,7 +25,7 @@ void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT]) {
                 grayImage[x][y] = 0;
             }
             else {
-                grayImage[x][y] = 255;
+                grayImage[x][y] = 1;
             }
         }
     }
