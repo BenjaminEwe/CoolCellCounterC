@@ -5,7 +5,7 @@
 #define STRUCTURING_ELEMENT_SIZE 3
 const unsigned char STRUCTURING_ELEMENT[STRUCTURING_ELEMENT_SIZE][STRUCTURING_ELEMENT_SIZE] = {{0, 1, 0}, {1, 1, 1}, {0, 1, 0}};
 
-void erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
+_Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
 {
     int x, y;           // Used to traverse the image
     int i, j;           // Used to check with STRUCTURING_ELEMENT
@@ -13,6 +13,7 @@ void erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
     const int CHECK_DISPLACEMENT = -STRUCTURING_ELEMENT_SIZE / 2;
     unsigned char erodedImage[BMP_WIDTH][BMP_HEIGHT];
     _Bool shouldErode;
+    _Bool erodedSomething = 0;
 
     for (x = 0; x < BMP_WIDTH; x++)
     {
@@ -46,6 +47,7 @@ void erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
             if (shouldErode)
             {
                 erodedImage[x][y] = 0;
+                erodedSomething = 1;
             }
             else
             {
@@ -61,4 +63,6 @@ void erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
             binaryImage[x][y] = erodedImage[x][y];
         }
     }
+    
+    return erodedSomething;
 }
