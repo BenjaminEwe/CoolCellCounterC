@@ -26,8 +26,7 @@ int main() {
         }
     }
 
-    read_bitmap("example.bmp", garbage);
+    read_bitmap("../TestResources/example.bmp", garbage);
     write_bitmap(image, "output.bmp");
-
     return 0;
 }

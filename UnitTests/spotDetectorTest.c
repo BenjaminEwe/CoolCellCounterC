@@ -2,7 +2,7 @@
 #include "../markerAdder.h"
 #include <stdio.h>
 
-char* input_file_path = "results_example/step_8.bmp";
+char* input_file_path = "../TestResources/step_8.bmp";
 unsigned char image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
 unsigned char flatImage[BMP_WIDTH][BMP_HEIGHT];
 unsigned int coordinates[20][2];
