@@ -20,6 +20,11 @@ move_change_run() {
     cd ..
 }
 
+# Image manipulator test
+gcc UnitTests/imageManipulatorTest.c imageManipulator.c cbmp.c -o test
+move_change_run
+did_test_pass "Image Manipulator Tests"
+
 # Erosion Test
 gcc UnitTests/erosionTest.c erosion.c cbmp.c -o test
 move_change_run
