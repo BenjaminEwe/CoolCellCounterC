@@ -25,8 +25,8 @@ void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int 
 bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y) {
     bool whiteFound = false;
 
-    for (int i = x - 5; i < x + 6; i++) {
-        for (int j = y - 5; j < y + 6; j++) {
+    for (int i = x - 5; i <= x + 6; i++) {
+        for (int j = y - 5; j <= y + 6; j++) {
             if (i < 0 || i >= BMP_WIDTH || j < 0 || j >= BMP_HEIGHT) {
                 continue;
             }
@@ -40,7 +40,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x,
         return false; // We havent found a single white cell in the inclusion window
     }
 
-    for (int i = x - 6; i < x + 7; i++) {
+    for (int i = x - 6; i <= x + 7; i++) {
         if (i < 0 || i >= BMP_WIDTH || y-6 < 0 || y+7 >= BMP_HEIGHT) {
             continue;
         }
@@ -49,7 +49,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x,
         }
     }
 
-    for (int i = y - 6; i < y + 7; i++) {
+    for (int i = y - 6; i <= y + 7; i++) {
         if (i < 0 || i >= BMP_WIDTH || x-6 < 0 || x+7 >= BMP_HEIGHT) {
             continue;
         }
