@@ -1,9 +1,6 @@
 #include "cbmp.h"
 #include <stdbool.h>
 
-#define DETECTION_SIZE 12
-#define EXCLUSION_SIZE 1
-
 bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y);
 void eraseSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y);
 
@@ -23,27 +20,16 @@ void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int 
 }
 
 bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y) {
-    bool whiteFound = false;
-
-    for (int i = x - 5; i <= x + 6; i++) {
-        for (int j = y - 5; j <= y + 6; j++) {
-            if (i < 0 || i >= BMP_WIDTH || j < 0 || j >= BMP_HEIGHT) {
-                continue;
-            }
-            if (binaryImage[i][j]) {
-                whiteFound = true;
-            }
-        }
+    if (!binaryImage[x][y]) { 
+        return false; // We only check the centre one: If one of its neighbours have a white spot, we will process that later.
     }
 
-    if (!whiteFound) { 
-        return false; // We havent found a single white cell in the inclusion window
-    }
-
+    // Exclusion ring:
     for (int i = x - 6; i <= x + 7; i++) {
         if (i < 0 || i >= BMP_WIDTH || y-6 < 0 || y+7 >= BMP_HEIGHT) {
             continue;
         }
+
         if (binaryImage[i][y-6] || binaryImage[i][y+7]) {
             return false;
         }
@@ -53,6 +39,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x,
         if (i < 0 || i >= BMP_WIDTH || x-6 < 0 || x+7 >= BMP_HEIGHT) {
             continue;
         }
+        
         if (binaryImage[x-6][i] || binaryImage[x+7][i]) {
             return false;
         }
