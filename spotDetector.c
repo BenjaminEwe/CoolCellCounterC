@@ -9,7 +9,7 @@ void eraseSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y);
 
 /// Returns the number found
 /// Modifies the coordinate array
-void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int outputCoordinates[][2], int* foundSpots) {
+void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned char (*outputCoordinates)[2], int* foundSpots) {
     for (int i = 0; i < BMP_WIDTH; i++) {
         for (int j = 0; j < BMP_HEIGHT; j++) {
             if (scanForSpots(binaryImage, i, j)) {

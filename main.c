@@ -27,11 +27,16 @@ int main(int argc, char **argv)
 
   unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT];
   int foundSpots = 0;
-  unsigned int spotCoordinates[1000][2];
-  #if defined(TIME_GREY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
-    clock_t start, end;
-    double cpu_time_used;
-  #endif
+  unsigned char (*spotCoordinates)[2] = malloc(sizeof(unsigned char[1000][2]));
+#if defined(TIME_GRAY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
+  clock_t start, end;
+  double cpu_time_used;
+#endif
+  if (spotCoordinates == NULL)
+  {
+    printf("Insufficient heap space\n");
+    return 1;
+  }
 
   // Checking that 2 arguments are passed
   if (argc != 3)
@@ -45,63 +50,63 @@ int main(int argc, char **argv)
   // Load image from file
   read_bitmap(argv[1], input_image);
 
-  #ifdef TIME_ALL
-    start = clock();
-  #endif
+#ifdef TIME_ALL
+  start = clock();
+#endif
 
-  #ifdef TIME_GREY
-    start = clock();
-  #endif
+#ifdef TIME_GRAY
+  start = clock();
+#endif
   convertRgbToGray(input_image, binaryImage);
-  #ifdef TIME_GREY
-    end = clock();
+#ifdef TIME_GRAY
+  end = clock();
 
-    cpu_time_used = end - start;
-    printf("RGB to gray conversion time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
-  #endif
+  cpu_time_used = end - start;
+  printf("RGB to gray conversion time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
+#endif
 
-  #ifdef TIME_BINARY
-    start = clock();
-  #endif
+#ifdef TIME_BINARY
+  start = clock();
+#endif
   binaryThreshold(binaryImage);
-  #ifdef TIME_BINARY
-    end = clock();
+#ifdef TIME_BINARY
+  end = clock();
 
-    cpu_time_used = end - start;
-    printf("Binary threshold time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
-  #endif
+  cpu_time_used = end - start;
+  printf("Binary threshold time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
+#endif
 
-  #ifdef TIME_EROSION_SPOTS
-    start = clock();
-  #endif
+#ifdef TIME_EROSION_SPOTS
+  start = clock();
+#endif
   while (erodeImage(binaryImage))
   {
     detectSpots(binaryImage, spotCoordinates, &foundSpots);
   }
-  #ifdef TIME_EROSION_SPOTS
-    end = clock();
+#ifdef TIME_EROSION_SPOTS
+  end = clock();
 
-    cpu_time_used = end - start;
-    printf("Erosion and spot detection time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
-  #endif
+  cpu_time_used = end - start;
+  printf("Erosion and spot detection time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
+#endif
 
-  #ifdef TIME_MARKERS
-    start = clock();
-  #endif
+#ifdef TIME_MARKERS
+  start = clock();
+#endif
   addMarkersToImage(input_image, spotCoordinates, foundSpots);
-  #ifdef TIME_MARKERS
-    end = clock();
+#ifdef TIME_MARKERS
+  end = clock();
 
-    cpu_time_used = end - start;
-    printf("Adding markers time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
-  #endif
+  cpu_time_used = end - start;
+  printf("Adding markers time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
+#endif
 
-  #ifdef TIME_ALL
-    end = clock();
+#ifdef TIME_ALL
+  end = clock();
 
-    cpu_time_used = end - start;
-    printf("Total time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
-  #endif
+  cpu_time_used = end - start;
+  printf("Total time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
+#endif
 
   // Save image to file
   write_bitmap(input_image, argv[2]);
@@ -112,6 +117,8 @@ int main(int argc, char **argv)
   {
     printf("(%d, %d)\n", spotCoordinates[i][0], spotCoordinates[i][1]);
   }
+
+  free(spotCoordinates);
 
   return 0;
 }
