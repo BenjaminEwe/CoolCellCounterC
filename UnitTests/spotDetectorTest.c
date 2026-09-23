@@ -16,7 +16,8 @@ int main() {
 
     flattenImage(image, flatImage);
 
-    int found = detectSpots(flatImage, coordinates);
+    int found;
+    detectSpots(flatImage, coordinates, &found);
 
     deepenImage(image, flatImage);
 

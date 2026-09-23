@@ -6,7 +6,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#if defined(TIME_GRAY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
 #include <time.h>
+#endif
 #include "cbmp.h"
 #include "imageManipulator.h"
 #include "erosion.h"
@@ -15,7 +17,7 @@
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
-unsigned char output_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
+// unsigned char output_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
 
 // Main function
 int main(int argc, char **argv)
@@ -27,7 +29,7 @@ int main(int argc, char **argv)
 
   unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT];
   int foundSpots = 0;
-  unsigned int (*spotCoordinates)[2] = malloc(sizeof(unsigned int[1000][2]));
+  unsigned int spotCoordinates[10000][2];
 #if defined(TIME_GRAY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
   clock_t start, end;
   double cpu_time_used;
@@ -41,7 +43,7 @@ int main(int argc, char **argv)
   // Checking that 2 arguments are passed
   if (argc != 3)
   {
-    fprintf(stderr, "Usage: %s <output file path> <output file path>\n", argv[0]);
+    fprintf(stderr, "Usage: %s <input file path> <output file path>\n", argv[0]);
     exit(1);
   }
 
@@ -117,8 +119,6 @@ int main(int argc, char **argv)
   {
     printf("(%d, %d)\n", spotCoordinates[i][0], spotCoordinates[i][1]);
   }
-
-  free(spotCoordinates);
 
   return 0;
 }

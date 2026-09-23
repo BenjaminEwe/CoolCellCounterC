@@ -59,6 +59,10 @@ void addMarker(int xCoord, int yCoord, unsigned char image[BMP_WIDTH][BMP_HEIGHT
     for (int i = 0; i < sizeof(mask) / sizeof(mask[0]); i++) {
         int x = xCoord + mask[i][0];
         int y = yCoord + mask[i][1];
+
+        if (x < 0 || x >= BMP_WIDTH || y < 0 || y >= BMP_HEIGHT) {
+            continue; // Skip pixels that are out of bounds
+        }
         
         switch(mask[i][2]) {
             case 0: // black
