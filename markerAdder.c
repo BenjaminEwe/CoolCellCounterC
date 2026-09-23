@@ -14,7 +14,7 @@
 
 void addMarker(int xCoord, int yCoord, unsigned char image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS]);
 
-void addMarkersToImage(unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], const unsigned char (*spotCoordinates)[2], unsigned count) {
+void addMarkersToImage(unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], const unsigned int (*spotCoordinates)[2], unsigned count) {
     for (int i = 0; i < count; i++) {
         addMarker(spotCoordinates[i][0], spotCoordinates[i][1], rgbImage);
     }

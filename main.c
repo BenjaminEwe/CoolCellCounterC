@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
   unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT];
   int foundSpots = 0;
-  unsigned char (*spotCoordinates)[2] = malloc(sizeof(unsigned char[1000][2]));
+  unsigned int (*spotCoordinates)[2] = malloc(sizeof(unsigned int[1000][2]));
 #if defined(TIME_GRAY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
   clock_t start, end;
   double cpu_time_used;
