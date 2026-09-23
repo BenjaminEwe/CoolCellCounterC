@@ -9,11 +9,7 @@ int main() {
 
     convertRgbToGray(rgbImage, outputImage);
 
-    // RGB test here?
-
     binaryThreshold(outputImage);
-
-    // Binary  threshold test here?
 
     write_bitmap(outputImage, "manipulatorOutput.bmp");
 
