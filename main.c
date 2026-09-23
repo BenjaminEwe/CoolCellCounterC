@@ -6,7 +6,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#if defined(TIME_GRAY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
 #include <time.h>
+#endif
 #include "cbmp.h"
 #include "imageManipulator.h"
 #include "erosion.h"
@@ -15,7 +17,7 @@
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
-//unsigned char output_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
+// unsigned char output_image[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS];
 
 // Main function
 int main(int argc, char **argv)
