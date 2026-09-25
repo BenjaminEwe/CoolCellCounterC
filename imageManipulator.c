@@ -11,11 +11,7 @@ void convertRgbToGray(const unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CH
     {
         for (int y = 0; y < BMP_HEIGHT; y++)
         {
-            unsigned char red = rgbImage[x][y][0];
-            unsigned char green = rgbImage[x][y][1];
-            unsigned char blue = rgbImage[x][y][2];
-
-            outputImage[x][y] = (red + green + blue) / 3;
+            outputImage[x][y] = rgbImage[x][y][0];
         }
     }
 }
