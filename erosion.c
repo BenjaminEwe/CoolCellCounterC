@@ -14,6 +14,7 @@ _Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
     unsigned char erodedImage[BMP_WIDTH][BMP_HEIGHT];
     _Bool shouldErode;
     _Bool erodedSomething = 0;
+    _Bool notLonely; // True if target pixel has an adjacent white pixel
 
     for (x = 0; x < BMP_WIDTH; x++)
     {
@@ -26,6 +27,7 @@ _Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
             }
 
             shouldErode = 0;
+            notLonely = 0;
             for (i = 0, checkX = x + CHECK_DISPLACEMENT; i < STRUCTURING_ELEMENT_SIZE && checkX < BMP_WIDTH; i++, checkX++)
             {
                 if (checkX < 0)
@@ -34,17 +36,21 @@ _Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
                 {
                     if (checkY < 0)
                         continue;
+
                     if (STRUCTURING_ELEMENT[i][j] == 1 && binaryImage[checkX][checkY] == 0)
-                    {
                         shouldErode = 1;
+
+                    if (STRUCTURING_ELEMENT[i][j] == 1 && binaryImage[checkX][checkY] == 1)
+                        notLonely = 1;
+
+                    if (shouldErode && notLonely)
                         break;
-                    }
                 }
-                if (shouldErode)
+                if (shouldErode && notLonely)
                     break;
             }
 
-            if (shouldErode)
+            if (shouldErode && notLonely)
             {
                 erodedImage[x][y] = 0;
                 erodedSomething = 1;
