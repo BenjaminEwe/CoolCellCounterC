@@ -8,9 +8,9 @@ else
 fi
 
 echo "Easy"
-./main "samples/easy/1EASY.bmp" "results/1EASY_RESULT.bmp"
+./main "samples/easy/1EASY.bmp" "results/1EASY_RESULT_NEW.bmp"
 echo "Medium"
-./main "samples/medium/1MEDIUM.bmp" "results/1MEDIUM_RESULT.bmp"
+./main "samples/medium/1MEDIUM.bmp" "results/1MEDIUM_RESULT_NEW.bmp"
 echo "Hard"
-./main "samples/hard/1HARD.bmp" "results/1HARD_RESULT.bmp"
+./main "samples/hard/1HARD.bmp" "results/1HARD_RESULT_NEW.bmp"
 # ./main "samples/impossible/1IMPOSSIBLE.bmp" "results/1IMPOSSIBLE_RESULT.bmp"

@@ -27,7 +27,8 @@ int main(int argc, char **argv)
   // argv[1] is the first command line argument (input image)
   // argv[2] is the second command line argument (output image)
 
-  unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT];
+  unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT];
+  unsigned char binaryImage[BMP_1D_SIZE];
   int foundSpots = 0;
   unsigned int spotCoordinates[10000][2];
 #if defined(TIME_GRAY) || defined(TIME_BINARY) || defined(TIME_EROSION_SPOTS) || defined(TIME_MARKERS) || defined(TIME_ALL)
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
 #ifdef TIME_GRAY
   start = clock();
 #endif
-  convertRgbToGray(input_image, binaryImage);
+  convertRgbToGray(input_image, grayImage);
 #ifdef TIME_GRAY
   end = clock();
 
@@ -70,7 +71,7 @@ int main(int argc, char **argv)
 #ifdef TIME_BINARY
   start = clock();
 #endif
-  binaryThreshold(binaryImage);
+  binaryThreshold(grayImage, binaryImage);
 #ifdef TIME_BINARY
   end = clock();
 
