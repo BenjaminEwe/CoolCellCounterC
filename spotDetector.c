@@ -14,6 +14,7 @@ void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int 
                 outputCoordinates[*foundSpots][1] = j;
                 (*foundSpots)++;
                 eraseSpots(binaryImage, i, j);
+                j += 6; // We have already erased the next 6 pixels, so we can skip them
             }
         }
     }
