@@ -5,13 +5,15 @@
 #define STRUCTURING_ELEMENT_SIZE 3
 const unsigned char STRUCTURING_ELEMENT[STRUCTURING_ELEMENT_SIZE][STRUCTURING_ELEMENT_SIZE] = {{0, 1, 0}, {1, 1, 1}, {0, 1, 0}};
 
-_Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
+_Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
 {
     int x, y;           // Used to traverse the image
     int i, j;           // Used to check with STRUCTURING_ELEMENT
     int checkX, checkY; // Also used to check with STRUCTURING_ELEMENT
     const int CHECK_DISPLACEMENT = -STRUCTURING_ELEMENT_SIZE / 2;
-    unsigned char erodedImage[BMP_WIDTH][BMP_HEIGHT];
+    unsigned char erodedImage[BMP_1D_SIZE] = {0};
+    int currIndex = 0;
+    int currMask = 0;
     _Bool shouldErode;
     _Bool erodedSomething = 0;
 
@@ -19,9 +21,12 @@ _Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
     {
         for (y = 0; y < BMP_HEIGHT; y++)
         {
-            if (binaryImage[x][y] == 0)
+            currIndex = (x + y * BMP_WIDTH) >> 3;
+            currMask = 1 << ((x + y * BMP_WIDTH) & 7);
+
+            if (!(binaryImage[currIndex] & currMask))
             {
-                erodedImage[x][y] = 0;
+                erodedImage[currIndex] &= ~currMask;
                 continue;
             }
 
@@ -34,7 +39,7 @@ _Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
                 {
                     if (checkY < 0)
                         continue;
-                    if (STRUCTURING_ELEMENT[i][j] == 1 && binaryImage[checkX][checkY] == 0)
+                    if (STRUCTURING_ELEMENT[i][j] == 1 && !(binaryImage[(checkX + checkY * BMP_WIDTH) >> 3] & (1 << ((checkX + checkY * BMP_WIDTH) & 7))))
                     {
                         shouldErode = 1;
                         break;
@@ -46,23 +51,20 @@ _Bool erodeImage(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT])
 
             if (shouldErode)
             {
-                erodedImage[x][y] = 0;
+                erodedImage[currIndex] &= ~currMask;
                 erodedSomething = 1;
             }
             else
             {
-                erodedImage[x][y] = 1;
+                erodedImage[currIndex] |= currMask;
             }
         }
     }
 
-    for (x = 0; x < BMP_WIDTH; x++)
+    for (i = 0; i < BMP_1D_SIZE; i++)
     {
-        for (y = 0; y < BMP_HEIGHT; y++)
-        {
-            binaryImage[x][y] = erodedImage[x][y];
-        }
+        binaryImage[i] = erodedImage[i];
     }
-    
+
     return erodedSomething;
 }

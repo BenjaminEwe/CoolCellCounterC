@@ -1,12 +1,12 @@
 #include "cbmp.h"
 #include <stdbool.h>
 
-bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y);
-void eraseSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y);
+bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y);
+void eraseSpots(unsigned char binaryImage[BMP_1D_SIZE], int x, int y);
 
 /// Returns the number found
 /// Modifies the coordinate array
-void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int (*outputCoordinates)[2], int* foundSpots) {
+void detectSpots(unsigned char binaryImage[BMP_1D_SIZE], unsigned int (*outputCoordinates)[2], int* foundSpots) {
     for (int i = 0; i < BMP_WIDTH; i++) {
         for (int j = 0; j < BMP_HEIGHT; j++) {
             if (scanForSpots(binaryImage, i, j)) {
@@ -20,8 +20,8 @@ void detectSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], unsigned int 
     }
 }
 
-bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y) {
-    if (!binaryImage[x][y]) { 
+bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
+    if (!(binaryImage[(x + y * BMP_WIDTH) >> 3] & (1 << ((x + y * BMP_WIDTH) & 7)))) { 
         return false; // We only check the centre one: If one of its neighbours have a white spot, we will process that later.
     }
 
@@ -31,7 +31,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x,
             continue;
         }
 
-        if (binaryImage[i][y-6] || binaryImage[i][y+7]) {
+        if (binaryImage[(i + (y-6) * BMP_WIDTH) >> 3] & (1 << ((i + (y-6) * BMP_WIDTH) & 7)) || binaryImage[(i + (y+7) * BMP_WIDTH) >> 3] & (1 << ((i + (y+7) * BMP_WIDTH) & 7))) {
             return false;
         }
     }
@@ -41,7 +41,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x,
             continue;
         }
         
-        if (binaryImage[x-6][i] || binaryImage[x+7][i]) {
+        if (binaryImage[(x-6 + i * BMP_WIDTH) >> 3] & (1 << ((x-6 + i * BMP_WIDTH) & 7)) || binaryImage[(x+7 + i * BMP_WIDTH) >> 3] & (1 << ((x+7 + i * BMP_WIDTH) & 7))) {
             return false;
         }
     }
@@ -49,14 +49,13 @@ bool scanForSpots(const unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x,
     return true; // We havent found a single white pixel in the exclusion window
 }
 
-void eraseSpots(unsigned char binaryImage[BMP_WIDTH][BMP_HEIGHT], int x, int y) {
+void eraseSpots(unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
     for (int i = x - 6; i < x + 7; i++) {
         for (int j = y - 6; j < y + 7; j++) {
             if (i < 0 || i >= BMP_WIDTH || j < 0 || j >= BMP_HEIGHT) {
                 continue;
             }
-            
-            binaryImage[i][j] = 0;
+            binaryImage[(i + j * BMP_WIDTH) >> 3] &= ~(1 << ((i + j * BMP_WIDTH) & 7));
         }
     }
 }

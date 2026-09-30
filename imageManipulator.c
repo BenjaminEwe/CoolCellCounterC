@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "cbmp.h"
+#include "imageManipulator.h"
+
+unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT]);
 
 unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT]);
 
@@ -17,21 +20,26 @@ void convertRgbToGray(const unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CH
 }
 
 // Converts the grey-scale image into a binary image, where every pixel can only have 2 colors, fully black or fully white
-void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT])
+void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT], unsigned char outputImage[BMP_1D_SIZE])
 {
-    int threshold = findThreshold(grayImage);
+    unsigned char threshold = findThreshold(grayImage);
+    char bit = 0;
+    int i = 0;
 
     for (int x = 0; x < BMP_WIDTH; x++)
     {
         for (int y = 0; y < BMP_HEIGHT; y++)
         {
+            i = (x + y * BMP_WIDTH) >> 3;
+            bit = (x + y * BMP_WIDTH) & 7;
+            
             if (grayImage[x][y] <= threshold)
             {
-                grayImage[x][y] = 0;
+                outputImage[i] &= ~(1 << bit); // Set the bit to 0
             }
             else
             {
-                grayImage[x][y] = 1;
+                outputImage[i] |= 1 << bit; // Set the bit to 1
             }
         }
     }
@@ -58,27 +66,31 @@ unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT])
         }
     }
 
-    for (int i = 0; i < 256; i++) {
+    for (int i = 0; i < 256; i++)
+    {
         p[i] /= totalPixels;
         mG += i * p[i];
     }
 
-    for (int i = 0; i < 256; i++) {
+    for (int i = 0; i < 256; i++)
+    {
         P1 += p[i];
         mk += i * p[i];
         sigmaB = (mG * P1 - mk) * (mG * P1 - mk) / (P1 * (1 - P1));
 
-        if (sigmaB > max) {
+        if (sigmaB > max)
+        {
             max = sigmaB;
             threshold = i;
             nrOfMaxVals = 1;
         }
-        else if (sigmaB == max) {
+        else if (sigmaB == max)
+        {
             threshold += i;
             nrOfMaxVals++;
         }
     }
-    
+
     threshold /= nrOfMaxVals;
 
     printf("Threshold = %d\n", threshold);

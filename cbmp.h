@@ -5,6 +5,9 @@
 #define BMP_HEIGHT 950
 #define BMP_CHANNELS 3
 
+// Added it here for convenience
+#define BMP_1D_SIZE ((BMP_WIDTH * BMP_HEIGHT) >> 3) + 1
+
 // Public function declarations
 void read_bitmap(char * input_file_path, unsigned char output_image_array[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS]);
 void write_bitmap(unsigned char input_image_array[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], char * output_file_path);

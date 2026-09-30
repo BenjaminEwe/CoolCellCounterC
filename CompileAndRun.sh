@@ -14,3 +14,5 @@ echo "Medium"
 echo "Hard"
 ./main "samples/hard/1HARD.bmp" "results/1HARD_RESULT.bmp"
 # ./main "samples/impossible/1IMPOSSIBLE.bmp" "results/1IMPOSSIBLE_RESULT.bmp"
+
+rm main.exe
