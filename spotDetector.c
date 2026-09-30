@@ -1,5 +1,6 @@
 #include "cbmp.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y);
 void eraseSpots(unsigned char binaryImage[BMP_1D_SIZE], int x, int y);
@@ -27,21 +28,21 @@ bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
 
     // Exclusion ring:
     for (int i = x - 6; i <= x + 7; i++) {
-        if (i < 0 || i >= BMP_WIDTH || y-6 < 0 || y+7 >= BMP_HEIGHT) {
+        if (i < 0 || i >= BMP_WIDTH) {
             continue;
         }
 
-        if (binaryImage[(i + (y-6) * BMP_WIDTH) >> 3] & (1 << ((i + (y-6) * BMP_WIDTH) & 7)) || binaryImage[(i + (y+7) * BMP_WIDTH) >> 3] & (1 << ((i + (y+7) * BMP_WIDTH) & 7))) {
+        if ((y-6 >= 0 && binaryImage[(i + (y-6) * BMP_WIDTH) >> 3] & (1 << ((i + (y-6) * BMP_WIDTH) & 7))) || (y+7 < BMP_HEIGHT && binaryImage[(i + (y+7) * BMP_WIDTH) >> 3] & (1 << ((i + (y+7) * BMP_WIDTH) & 7)))) {
             return false;
         }
     }
 
     for (int i = y - 6; i <= y + 7; i++) {
-        if (i < 0 || i >= BMP_WIDTH || x-6 < 0 || x+7 >= BMP_HEIGHT) {
+        if (i < 0 || i >= BMP_WIDTH) {
             continue;
         }
         
-        if (binaryImage[(x-6 + i * BMP_WIDTH) >> 3] & (1 << ((x-6 + i * BMP_WIDTH) & 7)) || binaryImage[(x+7 + i * BMP_WIDTH) >> 3] & (1 << ((x+7 + i * BMP_WIDTH) & 7))) {
+        if ((x-6 >= 0 && binaryImage[(x-6 + i * BMP_WIDTH) >> 3] & (1 << ((x-6 + i * BMP_WIDTH) & 7))) || (x+7 < BMP_WIDTH && binaryImage[(x+7 + i * BMP_WIDTH) >> 3] & (1 << ((x+7 + i * BMP_WIDTH) & 7)))) {
             return false;
         }
     }
@@ -51,10 +52,11 @@ bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
 
 void eraseSpots(unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
     for (int i = x - 6; i < x + 7; i++) {
+        if (i < 0) continue;
+        if (i >= BMP_WIDTH) break;
         for (int j = y - 6; j < y + 7; j++) {
-            if (i < 0 || i >= BMP_WIDTH || j < 0 || j >= BMP_HEIGHT) {
-                continue;
-            }
+            if (j < 0) continue;
+            if (j >= BMP_HEIGHT) break;
             binaryImage[(i + j * BMP_WIDTH) >> 3] &= ~(1 << ((i + j * BMP_WIDTH) & 7));
         }
     }
