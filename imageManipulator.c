@@ -5,10 +5,15 @@
 
 unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT]);
 
+unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT]);
+
 // Removes color from image, turning it to grayscale, outputs a 2-dimensional array with the greyscale average of the colors of each pixel
-void convertRgbToGray(const unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], unsigned char outputImage[BMP_WIDTH][BMP_HEIGHT]) {
-    for (int x = 0; x < BMP_WIDTH; x++) {
-        for (int y = 0; y < BMP_HEIGHT; y++) {
+void convertRgbToGray(const unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], unsigned char outputImage[BMP_WIDTH][BMP_HEIGHT])
+{
+    for (int x = 0; x < BMP_WIDTH; x++)
+    {
+        for (int y = 0; y < BMP_HEIGHT; y++)
+        {
             outputImage[x][y] = rgbImage[x][y][0];
         }
     }
