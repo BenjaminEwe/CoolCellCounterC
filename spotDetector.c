@@ -1,9 +1,6 @@
 #include "cbmp.h"
 #include <stdbool.h>
 
-#define DETECTION_SIZE 12
-#define EXCLUSION_SIZE 1
-
 bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y);
 void eraseSpots(unsigned char binaryImage[BMP_1D_SIZE], int x, int y);
 
@@ -28,7 +25,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
         return false; // We only check the centre one: If one of its neighbours have a white spot, we will process that later.
     }
 
-     // Exclusion ring:
+    // Exclusion ring:
     for (int i = x - 6; i <= x + 7; i++) {
         if (i < 0 || i >= BMP_WIDTH || y-6 < 0 || y+7 >= BMP_HEIGHT) {
             continue;
