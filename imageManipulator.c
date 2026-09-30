@@ -3,38 +3,21 @@
 #include "cbmp.h"
 #include "imageManipulator.h"
 
+unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT]);
+
 // Removes color from image, turning it to grayscale, outputs a 2-dimensional array with the greyscale average of the colors of each pixel
 void convertRgbToGray(const unsigned char rgbImage[BMP_WIDTH][BMP_HEIGHT][BMP_CHANNELS], unsigned char outputImage[BMP_WIDTH][BMP_HEIGHT]) {
     for (int x = 0; x < BMP_WIDTH; x++) {
         for (int y = 0; y < BMP_HEIGHT; y++) {
-            unsigned char red   = rgbImage[x][y][0];
-            unsigned char green = rgbImage[x][y][1];
-            unsigned char blue  = rgbImage[x][y][2];
-
-            outputImage[x][y] = (red + green + blue) / 3;
+            outputImage[x][y] = rgbImage[x][y][0];
         }
     }
 }
 
 // Converts the grey-scale image into a binary image, where every pixel can only have 2 colors, fully black or fully white
-<<<<<<< Updated upstream
-void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT]) {
-    int threshold = 90;
-
-    for (int x = 0; x < BMP_WIDTH; x++) {
-        for (int y = 0; y < BMP_HEIGHT; y++) {
-            if (grayImage[x][y] <= threshold) {
-                grayImage[x][y] = 0;
-            }
-            else {
-                grayImage[x][y] = 1;
-            }
-        }
-    }
-=======
 void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT], unsigned char outputImage[BMP_1D_SIZE])
 {
-    int threshold = findThreshold(grayImage);
+    unsigned char threshold = findThreshold(grayImage);
     char bit = 0;
     int i = 0;
 
@@ -42,8 +25,8 @@ void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT], unsigned ch
     {
         for (int y = 0; y < BMP_HEIGHT; y++)
         {
-            i = (x + y * BMP_WIDTH) / 8;
-            bit = (x + y * BMP_WIDTH) % 8;
+            i = (x + y * BMP_WIDTH) >> 3;
+            bit = (x + y * BMP_WIDTH) & 7;
             
             if (grayImage[x][y] <= threshold)
             {
@@ -108,5 +91,4 @@ unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT])
     printf("Threshold = %d\n", threshold);
 
     return threshold;
->>>>>>> Stashed changes
 }

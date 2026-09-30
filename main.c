@@ -27,7 +27,7 @@ int main(int argc, char **argv)
   // argv[1] is the first command line argument (input image)
   // argv[2] is the second command line argument (output image)
 
-  unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT];
+  unsigned char (*grayImage)[BMP_HEIGHT] = malloc(BMP_WIDTH * sizeof(unsigned char[BMP_HEIGHT]));
   unsigned char binaryImage[BMP_1D_SIZE];
   int foundSpots = 0;
   unsigned int spotCoordinates[10000][2];
@@ -78,6 +78,8 @@ int main(int argc, char **argv)
   cpu_time_used = end - start;
   printf("Binary threshold time: %f ms\n", cpu_time_used * 1000.0 / CLOCKS_PER_SEC);
 #endif
+
+  free(grayImage);
 
 #ifdef TIME_EROSION_SPOTS
   start = clock();

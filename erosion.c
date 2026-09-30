@@ -11,9 +11,9 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
     int i, j;           // Used to check with STRUCTURING_ELEMENT
     int checkX, checkY; // Also used to check with STRUCTURING_ELEMENT
     const int CHECK_DISPLACEMENT = -STRUCTURING_ELEMENT_SIZE / 2;
-    unsigned char erodedImage[BMP_1D_SIZE];
+    unsigned char erodedImage[BMP_1D_SIZE] = {0};
     int currIndex = 0;
-    int currBit = 0;
+    int currMask = 0;
     _Bool shouldErode;
     _Bool erodedSomething = 0;
 
@@ -21,11 +21,12 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
     {
         for (y = 0; y < BMP_HEIGHT; y++)
         {
-            currIndex = (x + y * BMP_WIDTH) / 8;
-            currBit = (x + y * BMP_WIDTH) % 8;
-            if (binaryImage[currIndex] & (1 << currBit) == 0)
+            currIndex = (x + y * BMP_WIDTH) >> 3;
+            currMask = 1 << ((x + y * BMP_WIDTH) & 7);
+
+            if (!(binaryImage[currIndex] & currMask))
             {
-                erodedImage[x + y * BMP_WIDTH] &= ~(1 << currBit);
+                erodedImage[currIndex] &= ~currMask;
                 continue;
             }
 
@@ -38,7 +39,7 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
                 {
                     if (checkY < 0)
                         continue;
-                    if (STRUCTURING_ELEMENT[i][j] == 1 && binaryImage[(checkX + checkY * BMP_WIDTH) / 8] & (1 << ((checkX + checkY * BMP_WIDTH) % 8)) == 0)
+                    if (STRUCTURING_ELEMENT[i][j] == 1 && !(binaryImage[(checkX + checkY * BMP_WIDTH) >> 3] & (1 << ((checkX + checkY * BMP_WIDTH) & 7))))
                     {
                         shouldErode = 1;
                         break;
@@ -50,12 +51,12 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
 
             if (shouldErode)
             {
-                erodedImage[currIndex] &= ~(1 << currBit);
+                erodedImage[currIndex] &= ~currMask;
                 erodedSomething = 1;
             }
             else
             {
-                erodedImage[currIndex] |= 1 << currBit;
+                erodedImage[currIndex] |= currMask;
             }
         }
     }
