@@ -56,4 +56,6 @@ dkms.conf
 
 .vscode/
 **/TestOutput
-results/
+
+results/*
+!results/.gitkeep

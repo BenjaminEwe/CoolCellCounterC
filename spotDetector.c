@@ -27,7 +27,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
     }
 
     // Exclusion ring:
-    for (int i = x - 6; i <= x + 7; i++) {
+    for (int i = x - 5; i <= x + 6; i++) {
         if (i < 0 || i >= BMP_WIDTH) {
             continue;
         }
@@ -37,7 +37,7 @@ bool scanForSpots(const unsigned char binaryImage[BMP_1D_SIZE], int x, int y) {
         }
     }
 
-    for (int i = y - 6; i <= y + 7; i++) {
+    for (int i = y - 5; i <= y + 6; i++) {
         if (i < 0 || i >= BMP_WIDTH) {
             continue;
         }
