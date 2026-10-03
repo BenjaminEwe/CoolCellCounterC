@@ -12,8 +12,8 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
     int checkX, checkY; // Also used to check with STRUCTURING_ELEMENT
     const int CHECK_DISPLACEMENT = -STRUCTURING_ELEMENT_SIZE / 2;
     unsigned char erodedImage[BMP_1D_SIZE] = {0};
-    int currIndex = 0;
-    int currMask = 0;
+    int currIndex = 0;  // The index in the 1D array
+    int currMask = 0;   // A mask for the bit that we will be working with
     _Bool shouldErode;
     _Bool erodedSomething = 0;
 
@@ -30,6 +30,7 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
                 continue;
             }
 
+            // Compare neighbouring pixels to STRUCTURING_ELEMENT to see if the current pixel should be eroded
             shouldErode = 0;
             for (i = 0, checkX = x + CHECK_DISPLACEMENT; i < STRUCTURING_ELEMENT_SIZE && checkX < BMP_WIDTH; i++, checkX++)
             {
@@ -61,6 +62,7 @@ _Bool erodeImage(unsigned char binaryImage[BMP_1D_SIZE])
         }
     }
 
+    // Overwrite the old image with the eroded image
     for (i = 0; i < BMP_1D_SIZE; i++)
     {
         binaryImage[i] = erodedImage[i];

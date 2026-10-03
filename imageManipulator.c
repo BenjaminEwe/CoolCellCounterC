@@ -48,16 +48,17 @@ void binaryThreshold(unsigned char grayImage[BMP_WIDTH][BMP_HEIGHT], unsigned ch
 // Otsu's Method for finding a threshold value
 unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT])
 {
-    double p[256] = {0};
+    double p[256] = {0};    // p[i] will store the probability of choosing a pixel with a value of i
     int totalPixels = BMP_WIDTH * BMP_HEIGHT;
     unsigned char threshold = 0;
-    double max = 0;
-    int nrOfMaxVals = 1;
-    double P1 = 0;
-    double mk = 0;
-    double mG = 0;
-    double sigmaB;
+    double max = 0;         // The maximum value of the difference in the mean of the pixel values under the threshold vs over the threshold
+    int nrOfMaxVals = 1;    // The number of values with the maximum difference
+    double P1 = 0;          // The probability of choosing a pixel with a value equal to or less than the current value
+    double mk = 0;          // The mean of the pixel values that are less than or equal to the current value
+    double mG = 0;          // The global mean (the mean of all the pixel values)
+    double sigmaB;          // The difference between the mean of the pixel values under the current value vs over the current value
 
+    // Populate the probability array with the number of times each value appears
     for (int x = 0; x < BMP_WIDTH; x++)
     {
         for (int y = 0; y < BMP_HEIGHT; y++)
@@ -66,12 +67,14 @@ unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT])
         }
     }
 
+    // Make the elements in the probability array be the probabilities and calculate the global mean 
     for (int i = 0; i < 256; i++)
     {
         p[i] /= totalPixels;
         mG += i * p[i];
     }
 
+    // Go through all possible threshold values and check the difference
     for (int i = 0; i < 256; i++)
     {
         P1 += p[i];
@@ -91,9 +94,8 @@ unsigned char findThreshold(const unsigned char image[BMP_WIDTH][BMP_HEIGHT])
         }
     }
 
+    // Make the threshold the mean of the possible thresholds
     threshold /= nrOfMaxVals;
-
-    printf("Threshold = %d\n", threshold);
 
     return threshold;
 }
